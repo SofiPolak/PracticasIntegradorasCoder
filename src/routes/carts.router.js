@@ -14,18 +14,18 @@ router.get('/:cid', async (req, res) => {
     res.send({ result: "success", payload: result })
 })
 
-//NO FUNCIONA EL AGREGAR UN CARRITO, VER SI MODELO ESTA BIEN
 router.post('/', async (req, res) => {
     const result = await cartManager.addCart();
     res.send({ result: "success", payload: result });
 })
 
+/* //Este metodo no se usa
 router.put('/:cid', async (req, res) => {
     let { cid } = req.params
     let cartToReplace = req.body
     const result = await cartManager.updateCart(cid,cartToReplace);
     res.send({ result: "success", payload: result });
-})
+})*/
 
 router.delete('/:cid', async (req, res) => {
     let { cid } = req.params
@@ -33,5 +33,13 @@ router.delete('/:cid', async (req, res) => {
     res.send({ result: "success", payload: result });
 })
 
+router.post("/:cid/product/:pid", async (req, res) => {
+
+        let cid = req.params.cid;
+        let pid = req.params.pid;
+        const result = await cartManager.updateCart(cid,pid);
+        res.send({ result: "success", payload: result });
+    
+})
 
 export default router;

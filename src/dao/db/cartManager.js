@@ -3,9 +3,10 @@ import cartModel from "../models/cart.model.js";
 class CartManager {
 
     async addCart() {
-        try{
-        let result = await cartModel.create()
-        return result;
+        try {
+            const cart = { products: [] };
+            let result = await cartModel.create(cart)
+            return result;
         } catch (error) {
             console.log(error);
         }
@@ -31,53 +32,40 @@ class CartManager {
         }
     }
 
-    async updateCart(cid,pid) {
+    async updateCart(cid, pid) {
 
-//VER PID Y CART TO REPLACE
+        try {
 
-        /*try {
-            const carts = await this.checkCarts();
+            let cartToUpdate = await cartModel.findOne({ _id: cid });
+            let products = cartToUpdate.products;
+            let productToUpdate = products.filter(p => p.id == pid);
 
-            const cart = carts.find(c => c.id === cid);
-            if (cart) {
-                const cartProducts = cart.cartProducts;
-                const productUpdate = cartProducts.find((p) => p.id === pid);
-
-                if(productUpdate){
-                    ++productUpdate.quantity;
-                }else{
-                    cartProducts.push({
-                        "id":pid,
-                        "quantity":0
-                    })
-                }
-                
-                const newCarts = carts.filter(item => item.id != cid);
-                newCarts.push(cart);
-                await fs.writeFile(this.path, JSON.stringify(carts, null, 2));
-                return cart;
+            if (productToUpdate.length > 0) {
+                ++productToUpdate[0].quantity;
             } else {
-                console.log("No se encontro el carrito para actualizar");
+                cartToUpdate.products.push({
+                    "id": pid,
+                    "quantity": 1
+                })
             }
 
+            let result = await cartModel.updateOne({ _id: cid }, cartToUpdate)
+
+            return result;
         } catch (error) {
-            console.error("Error al actualizar el carrito", error);
-        }*/
-    
-        /*if (!cartToReplace.products) {
-            res.send({ status: "error", error: "Parametros no definidos" })
-        }*/
-        let result = await cartModel.updateOne({ _id: cid }, cartToReplace)
-    
-        res.send({ result: "success", payload: result })
+            console.log(error)
+        }
 
     }
 
     async deleteCart(id) {
-        let result = await cartModel.deleteOne({ _id: id })
-        return result;
+        try {
+            let result = await cartModel.deleteOne({ _id: id })
+            return result;
+        } catch (error) {
+            console.log(error)
+        }
     }
-
 }
 
 export default CartManager;
