@@ -35,7 +35,7 @@ router.get('/register', isNotAuthenticated, (req, res) => {
     res.render('register');
 });
 
-router.get('/profile', isAuthenticated, (req, res) => {
+router.get('/current', isAuthenticated, (req, res) => {
     res.render('profile', { user: req.session.user });
 });
 
