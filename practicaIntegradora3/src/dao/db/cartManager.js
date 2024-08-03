@@ -55,7 +55,7 @@ class CartManager {
         }
     }
 
-    async updateCart(cid, pid) {
+    async updateCart(cid, pid, role, owner) {
 
         try {
 
@@ -63,13 +63,21 @@ class CartManager {
             let products = cartToUpdate.products;
             let productToUpdate = products.filter(p => p.product == pid);
 
+            let result;
+            if (role != "user") {
+                if (productToUpdate.owner != owner) {
+                    result = { message: "No puede agregar el producto al carrito si es el owner" }
+                    return result
+                }
+            }
+
             if (productToUpdate.length > 0) {
                 ++productToUpdate[0].quantity;
             } else {
                 cartToUpdate.products.push({ product: pid, quantity: 1 })
             }
 
-            let result = await cartModel.updateOne({ _id: cid }, cartToUpdate)
+            result = await cartModel.updateOne({ _id: cid }, cartToUpdate)
 
             return result;
         } catch (error) {

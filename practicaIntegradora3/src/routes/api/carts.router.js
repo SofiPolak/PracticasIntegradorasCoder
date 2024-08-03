@@ -1,6 +1,6 @@
 import { Router } from "express";
 import cartController from "../../controllers/carts.controller.js";
-import { isUser } from '../../middlewares/auth.js';
+import { isUser, isUserOrPremium } from '../../middlewares/auth.js';
 import { addProductCartErrorInfo } from "../../services/errors/info.js";
 import EErrors from "../../services/errors/enum.js";
 import CustomError from "../../services/errors/CustomError.js";
@@ -25,7 +25,9 @@ router.post('/', async (req, res) => {
 router.post("/:cid/products/:pid", isUser, async (req, res) => {
     let cid = req.params.cid;
     let pid = req.params.pid;
-    const result = await cartController.updateCart(cid, pid);
+    let role = req.session?.user?.role
+    let owner = req.session?.user?.email
+    const result = await cartController.updateCart(cid, pid, role, owner);
     res.send({ result: "success", payload: result });
 
 })

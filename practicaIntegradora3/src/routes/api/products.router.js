@@ -1,6 +1,6 @@
 import { Router } from "express";
 import productController from "../../controllers/products.controller.js";
-import { isAdmin } from '../../middlewares/auth.js';
+import { isAdmin, isAdminOrPremium } from '../../middlewares/auth.js';
 import { generateProducts } from "../../utils.js"
 import { generateProductErrorInfo } from "../../services/errors/info.js";
 import EErrors from "../../services/errors/enum.js";
@@ -53,8 +53,9 @@ router.put('/:pid', isAdmin, async (req, res) => {
 
 router.delete('/:pid', isAdmin, async (req, res) => {
     let { pid } = req.params
+    let role = req.session?.user?.role
     let owner = req.session?.user?.email
-    const result = await productController.deleteProduct(pid, owner);
+    const result = await productController.deleteProduct(pid, owner, role);
     res.send({ result: "success", payload: result });
 })
 

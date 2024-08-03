@@ -17,8 +17,8 @@ async function updateProduct(pid, productToReplace) {
   return productManager.updateProduct(pid, productToReplace);
 }
 
-async function deleteProduct(pid, owner) {
-  return productManager.deleteProduct(pid, owner);
+async function deleteProduct(pid, owner, role) {
+  return productManager.deleteProduct(pid, owner, role);
 }
 
 export default { getProducts, getProduct, addProduct, updateProduct, deleteProduct };

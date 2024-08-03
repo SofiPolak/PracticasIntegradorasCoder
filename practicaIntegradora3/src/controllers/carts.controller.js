@@ -13,8 +13,8 @@ async function addCart() {
   return cartManager.addCart();
 }
 
-async function updateCart(cid, pid) {
-  return cartManager.updateCart(cid, pid);
+async function updateCart(cid, pid, role, owner) {
+  return cartManager.updateCart(cid, pid, role, owner);
 }
 
 async function deleteProductCart(cid, pid) {

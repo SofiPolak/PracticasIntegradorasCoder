@@ -65,17 +65,17 @@ class ProductManager {
         }
     }
 
-    async deleteProduct(id, owner) {
+    async deleteProduct(id, owner, role) {
         try {
-            //Logica creada para usuarios premium
-            /*
             let result;
-            let product = await this.getProductById(id);
-            if (product.owner != owner) {
-                result = { message: "No puede eliminar el producto si no es el owner" }
-                return result
-            }*/
-            let result = await productModel.deleteOne({ _id: id });
+            if (role != "admin") {
+                let product = await this.getProductById(id);
+                if (product.owner != owner) {
+                    result = { message: "No puede eliminar el producto si no es el owner" }
+                    return result
+                }
+            }
+            result = await productModel.deleteOne({ _id: id });
             return result;
         } catch (error) {
             console.log(error);
