@@ -2,23 +2,23 @@ import ProductManager from "../dao/db/productManager.js";
 const productManager = new ProductManager();
 
 async function getProducts(query) {
-    return productManager.checkProducts(query);
-  }
+  return productManager.checkProducts(query);
+}
 
 async function getProduct(pid) {
-    return productManager.getProductById(pid);
-  }
+  return productManager.getProductById(pid);
+}
 
-async function addProduct(title, description, price, thumbnail, code, stock, available, category) {
-    return productManager.addProduct(title, description, price, thumbnail, code, stock, available, category);
-  }
+async function addProduct(title, description, price, thumbnail, code, stock, available, category, owner) {
+  return productManager.addProduct(title, description, price, thumbnail, code, stock, available, category, owner);
+}
 
-async function updateProduct(pid,productToReplace) {
-    return productManager.updateProduct(pid,productToReplace);
-  }
+async function updateProduct(pid, productToReplace) {
+  return productManager.updateProduct(pid, productToReplace);
+}
 
-async function deleteProduct(pid) {
-    return productManager.deleteProduct(pid);
-  }
+async function deleteProduct(pid, owner) {
+  return productManager.deleteProduct(pid, owner);
+}
 
-export default {getProducts, getProduct, addProduct, updateProduct, deleteProduct};
+export default { getProducts, getProduct, addProduct, updateProduct, deleteProduct };

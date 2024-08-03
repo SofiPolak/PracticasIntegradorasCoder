@@ -6,6 +6,7 @@ import productRouter from './routes/api/products.router.js'
 import viewsRouter from './routes/views.router.js'
 import messageRouter from './routes/api/messages.router.js'
 import loggerRouter from './routes/logger.router.js'
+import userRouter from './routes/api/users.router.js'
 import MessageManager from "./dao/db/messageManager.js";
 import dotenv from 'dotenv'
 import session from 'express-session';
@@ -48,7 +49,7 @@ app.use(session({
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(addLogger);
+//app.use(addLogger); // comentado para que no imprima en la terminal
 
 app.use('/loggerTest', loggerRouter)
 app.use('/api/carts', cartRouter)
@@ -56,6 +57,7 @@ app.use('/api/products', productRouter)
 app.use('/', viewsRouter)
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/messages', messageRouter)
+app.use('/api/users', userRouter)
 app.use(errorHandler)
 
 const httpServer = app.listen(PORT, console.log(`Server running on port ${PORT}`));

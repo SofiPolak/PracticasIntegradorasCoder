@@ -42,4 +42,8 @@ router.get('/current', isAuthenticated, async (req, res) => {
     res.render('profile', { user: user });
 });
 
+router.get('/changePass', (req, res) => {
+    res.render('changePass');
+});
+
 export default router

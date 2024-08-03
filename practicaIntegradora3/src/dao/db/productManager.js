@@ -2,9 +2,9 @@ import productModel from "../models/product.model.js";
 
 class ProductManager {
 
-    async addProduct(title, description, price, thumbnail, code, stock, available, category) {
+    async addProduct(title, description, price, thumbnail, code, stock, available, category, owner) {
         try {
-            let result = await productModel.create({ title, description, price, thumbnail, code, stock, available, category })
+            let result = await productModel.create({ title, description, price, thumbnail, code, stock, available, category, owner })
             return result;
         } catch (error) {
             console.log(error);
@@ -42,11 +42,11 @@ class ProductManager {
 
             let filterOptions = {};
             if (query.category) {
-                filterOptions = {category: query.category};
+                filterOptions = { category: query.category };
             }
 
             if (query.available) {
-                filterOptions = {available: query.available};
+                filterOptions = { available: query.available };
             }
 
             let products = await productModel.paginate(filterOptions, { limit: limit, page: page, sort: sortOptions });
@@ -65,8 +65,16 @@ class ProductManager {
         }
     }
 
-    async deleteProduct(id) {
+    async deleteProduct(id, owner) {
         try {
+            //Logica creada para usuarios premium
+            /*
+            let result;
+            let product = await this.getProductById(id);
+            if (product.owner != owner) {
+                result = { message: "No puede eliminar el producto si no es el owner" }
+                return result
+            }*/
             let result = await productModel.deleteOne({ _id: id });
             return result;
         } catch (error) {

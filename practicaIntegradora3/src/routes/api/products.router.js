@@ -21,6 +21,10 @@ router.get('/:pid', async (req, res) => {
 router.post('/', isAdmin, async (req, res) => {
     try {
         let { title, description, price, thumbnail, code, stock, available, category } = req.body
+        let owner = req.session?.user?.email
+        if (!owner) {
+            owner = "admin"
+        }
         if (!title || !description || !price || !thumbnail || !code || !stock || !available || !category) {
             CustomError.createError({
                 name: "Error en creacion del producto",
@@ -30,7 +34,7 @@ router.post('/', isAdmin, async (req, res) => {
             })
             //res.send({ status: "error", error: "Faltan parametros" })
         }
-        const result = await productController.addProduct(title, description, price, thumbnail, code, stock, available, category);
+        const result = await productController.addProduct(title, description, price, thumbnail, code, stock, available, category, owner);
         res.send({ result: "success", payload: result });
     } catch (error) {
         res.send({ status: "error", error: error.message, cause: error.cause })
@@ -49,7 +53,8 @@ router.put('/:pid', isAdmin, async (req, res) => {
 
 router.delete('/:pid', isAdmin, async (req, res) => {
     let { pid } = req.params
-    const result = await productController.deleteProduct(pid);
+    let owner = req.session?.user?.email
+    const result = await productController.deleteProduct(pid, owner);
     res.send({ result: "success", payload: result });
 })
 

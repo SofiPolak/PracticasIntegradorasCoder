@@ -93,7 +93,40 @@ const initializePassport = () => {
             return done(error)
         }
     }))
-
+    /*
+        passport.use('changePass', new LocalStrategy(
+            { passReqToCallback: true, usernameField: 'email' }, async (req, username, newPassword, done) => {
+                const { newPassword } = req.body;
+                console.log(newPassword)
+                console.log(username)
+    
+                try {
+                    let user = await userService.findOne({ email: username })
+                    console.log(user)
+                    if (!user) {
+                        console.log("El usuario no existe")
+                        return done(null, false)
+                    }
+    
+                    // Verificar que la nueva contraseña no sea igual a la antigua
+                    const isNewPasswordSame = await bcrypt.compare(newPassword, user.password);
+    
+                    if (isNewPasswordSame) {
+                        console.log("La nueva contraseña no puede ser la misma que la antigua");
+                        return done(null, false, { message: 'La nueva contraseña no puede ser la misma que la antigua' });
+                    }
+    
+                    // Actualizar la contraseña del usuario
+                    user.password = createHash(newPassword);
+                    await user.save();
+    
+                    return done(null, user);
+    
+                } catch (error) {
+                    return done("Error al cambiar contraseña del usuario" + error)
+                }
+            }
+        ))*/
 
 }
 
