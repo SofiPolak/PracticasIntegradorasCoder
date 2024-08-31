@@ -2,6 +2,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcryptjs';
 import { faker } from "@faker-js/faker";
+import multer from 'multer';
+import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -27,5 +29,26 @@ export const generateProducts = () => {
     }
     return products;
 }
+
+const getDestination = (req, file, cb) => {
+    let folder = 'documents';
+
+    if (req.body.type === 'profile') {
+        folder = 'profiles';
+    } else if (req.body.type === 'product') {
+        folder = 'products';
+    }
+
+    cb(null, path.join(__dirname, folder));
+};
+
+const storage = multer.diskStorage({
+    destination: getDestination,
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+export const upload = multer({ storage });
 
 export default __dirname;

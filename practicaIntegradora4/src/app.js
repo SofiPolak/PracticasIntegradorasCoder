@@ -64,6 +64,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 //app.use(addLogger); // comentado para que no imprima en la terminal
 
+app.use('/documents', express.static(path.join(__dirname, 'documents')));
+
 app.use('/loggerTest', loggerRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/products', productRouter)

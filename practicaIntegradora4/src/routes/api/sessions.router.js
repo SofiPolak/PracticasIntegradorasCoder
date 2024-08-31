@@ -3,6 +3,7 @@ import passport from 'passport';
 import __dirname from '../../utils.js';
 import dotenv from 'dotenv';
 import path from 'path';
+import userModel from '../../dao/models/users.model.js';
 
 const envPath = path.resolve(__dirname, 'src', '.env');
 dotenv.config({ path: envPath });
@@ -27,6 +28,11 @@ router.post('/login', passport.authenticate('login', { failureRedirect: 'faillog
         if (req.user.email == process.env.ADMIN_EMAIL) {
             role = "admin";
         }
+
+        await userModel.findByIdAndUpdate(req.user._id, {
+            last_connection: new Date()
+        });
+
         req.session.user = {
             first_name: req.user.first_name,
             last_name: req.user.last_name,
@@ -48,7 +54,11 @@ router.get('/faillogin', (req, res) => {
     res.send({ error: "Login fallido" })
 })
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+    const userId = req.session.passport.user;
+    await userModel.findByIdAndUpdate(userId, {
+        last_connection: new Date()
+    });
     req.session.destroy((err) => {
         if (err) return res.status(500).send('Error al cerrar sesión');
         res.redirect('/login');
